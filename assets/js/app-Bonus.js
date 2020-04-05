@@ -7,16 +7,14 @@
    - Animate the transitions for your circles' locations as well as the range of
      your axes. 
    - Do this for two risk factors for each axis or create three for each axis.
-* Hint: Try binding all of the CSV data to your circles. This will let you easily 
-determine their x or y values when you click the labels.
 
 2. Incorporate d3-tip
-While the ticks on the axes allow us to infer approximate values for each circle, 
-it's impossible to determine the true value without adding another layer of data. 
-Enter tooltips: developers can implement these in their D3 graphics to reveal a 
-specific element's data when the user hovers their cursor over the element. 
-Add tooltips to your circles and display each tooltip with the data that the user 
-has selected.
+   - While the ticks on the axes allow us to infer approximate values for each circle, 
+     it's impossible to determine the true value without adding another layer of data. 
+   - Enter tooltips: developers can implement these in their D3 graphics to reveal a 
+     specific element's data when the user hovers their cursor over the element. 
+   - Add tooltips to your circles and display each tooltip with the data that the user 
+     has selected.
 ***********************************************************************************/
 
 // basic settings for svg container
@@ -166,7 +164,7 @@ function styleX(value, chosenXAxis) {
 ************************************************************************/ 
 
 // function used for updating circles group with new tooltip
-function updateToolTip(chosenXAxis, chosenYAxis, textGroup) {
+function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
 
   // Define X labels
   if (chosenXAxis === "poverty") {
@@ -191,7 +189,8 @@ function updateToolTip(chosenXAxis, chosenYAxis, textGroup) {
     var yLabel = "Obesity (%):";
 
   }
-
+  
+  // Set up tool tip (using reference) 
   var toolTip = d3.tip()
     .attr("class", "d3-tip")
     .offset([-8, 0])
@@ -202,7 +201,6 @@ function updateToolTip(chosenXAxis, chosenYAxis, textGroup) {
   circlesGroup.call(toolTip);
 
   circlesGroup.on("mouseover", toolTip.show)
-    // onmouseout event
     .on("mouseout", toolTip.hide);
     return circlesGroup;
 }
@@ -314,11 +312,11 @@ d3.csv("/assets/data/data.csv").then(function(metadata, err) {
  ***********************************************************************/    
  
   // Create group for  3 y- axis labels
-  var yLabelGroup = chartGroup.append("g")
+  var yLabelsGroup = chartGroup.append("g")
     .attr("transform", `translate(${0 - margin.left/5}, ${height/4})`); 
  
   // First y - axis
-  var healthcareLabel= yLabelGroup.append("text")
+  var healthcareLabel= yLabelsGroup.append("text")
     .classed("aText", true)
     .classed('active', true) 
     .attr("transform", "rotate(-90)")
@@ -329,7 +327,7 @@ d3.csv("/assets/data/data.csv").then(function(metadata, err) {
     .text("Healthcare Rate (%)");
   
   // Second y - axis
-  var smokesLabel = yLabelGroup.append("text")
+  var smokesLabel = yLabelsGroup.append("text")
     .classed("aText", true)
     .classed('inactive', true)
     .attr("transform", "rotate(-90)")
@@ -340,7 +338,7 @@ d3.csv("/assets/data/data.csv").then(function(metadata, err) {
     .text("Smoke (%)");
 
   // Third y - axis  
-  var obesityLabel = yLabelGroup.append("text")
+  var obesityLabel = yLabelsGroup.append("text")
     .classed("aText", true)
     .classed('inactive', true)
     .attr("transform", "rotate(-90)")
